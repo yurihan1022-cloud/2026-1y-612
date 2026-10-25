@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ⅵ-1-3 생활 속 기체의 압력과 부피 관계</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F9FF;
+  --ink:#27324A;
+  --muted:#66728C;
+  --line:#DCE4F2;
+  --gas:#FF8A3D;        /* 기체: 주황 */
+  --gas-soft:#FFEBDD;
+  --sky:#5AB4E8;        /* 기체 입자: 하늘 */
+  --sky-soft:#E2F2FC;
+  --mint:#3FBFA6;
+  --mint-soft:#DDF5EF;
+  --sun:#FFD84D;
+  --sun-soft:#FFF6D2;
+  --answer:#16A34A;
+  --card:#FFFFFF;
+  --r:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',system-ui,sans-serif;font-size:19px;line-height:1.75;word-break:keep-all}
+img{max-width:100%;display:block}
+h1,h2,h3,.jua{font-family:'Jua','Noto Sans KR',sans-serif;font-weight:400;letter-spacing:-.01em}
+
+/* ===== 상단 내비 ===== */
+nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+nav .in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:6px;padding:10px 18px;overflow-x:auto}
+nav .brand{font-family:'Jua';font-size:20px;color:var(--gas);white-space:nowrap;margin-right:10px}
+nav a{white-space:nowrap;text-decoration:none;color:var(--ink);font-size:16px;padding:6px 14px;border-radius:999px;font-weight:500}
+nav a:hover,nav a.on{background:var(--gas-soft);color:#C85A12}
+
+/* ===== 히어로 ===== */
+.hero{position:relative;overflow:hidden;background:linear-gradient(160deg,#FFF1E6 0%,#FFE2CC 55%,#FFD3B3 100%);padding:64px 20px 70px}
+.hero .in{max-width:1180px;margin:0 auto;position:relative;z-index:2;display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+.hero .unit{display:inline-block;background:#fff;color:#C85A12;font-family:'Jua';font-size:20px;padding:4px 16px;border-radius:999px}
+.hero h1{font-size:clamp(40px,6vw,68px);line-height:1.15;margin:14px 0 10px;color:#3A2A1E}
+.hero p{margin:0;font-size:20px;color:#6B4A33}
+.hero .pages{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.hero .pages span{background:rgba(255,255,255,.75);border-radius:12px;padding:6px 14px;font-size:17px}
+#heroBox{width:100%;aspect-ratio:1/1;max-width:340px;justify-self:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#FFF7EF 60%,#FFE6D2 100%);box-shadow:inset 0 0 0 6px #fff, 0 12px 30px rgba(200,90,18,.18)}
+
+/* ===== 레이아웃 ===== */
+main{max-width:1180px;margin:0 auto;padding:10px 20px 80px}
+section{padding:46px 0 10px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.sec-head .num{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-family:'Jua';font-size:28px;color:#fff;background:var(--gas);flex:none}
+.sec-head h2{font-size:34px;margin:0;line-height:1.2}
+.sec-head small{display:block;font-family:'Noto Sans KR';font-size:15px;color:var(--muted);font-weight:500}
+
+.card{background:var(--card);border-radius:var(--r);padding:26px 28px;margin:18px 0;border:2px solid var(--line)}
+.card h3{font-size:25px;margin:0 0 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:'Jua';font-size:16px;padding:3px 12px;border-radius:999px;background:var(--sky-soft);color:#1F6FA0}
+.tag.gas{background:var(--gas-soft);color:#C85A12}
+.tag.mint{background:var(--mint-soft);color:#1E8571}
+.tag.sun{background:var(--sun-soft);color:#9A7400}
+.card.concept{border-color:#FFC9A3;background:linear-gradient(#fff,#fff) padding-box}
+.card.concept h3::before{content:"";width:10px;height:26px;border-radius:4px;background:var(--gas)}
+.card.think{background:#FBFDFF;border-color:#BFE0F5}
+.card.lab{border-color:#A9E3D6}
+.card.check{background:#FFFCEF;border-color:#F3DF8C}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.grid2.wide-left{grid-template-columns:1.3fr .7fr}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fig{background:#fff;border-radius:14px;padding:8px}
+.fig figcaption{font-size:15px;color:var(--muted);text-align:center;margin-top:4px}
+.photo{border-radius:14px;overflow:hidden}
+.bubble{background:var(--sky-soft);border-radius:18px;padding:14px 20px;font-weight:700;font-size:21px;position:relative}
+.big-q{font-family:'Jua';font-size:28px;line-height:1.45;color:#1F4E79;margin:4px 0 14px}
+.def{font-size:22px;font-weight:700;background:var(--gas-soft);border-radius:14px;padding:14px 20px;margin:12px 0}
+ol.steps{padding-left:0;list-style:none;counter-reset:s;margin:0}
+ol.steps li{counter-increment:s;position:relative;padding:6px 0 6px 46px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:7px;width:32px;height:32px;border-radius:50%;background:var(--mint);color:#fff;font-family:'Jua';font-size:19px;display:grid;place-items:center;line-height:1}
+.qlist{margin:0;padding:0;list-style:none}
+.qlist>li{padding:14px 0;border-top:1px dashed var(--line)}
+.qlist>li:first-child{border-top:none}
+.qn{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-family:'Jua';font-size:17px;margin-right:8px;line-height:1}
+.note{font-size:16px;color:var(--muted)}
+.side{background:#F3F6FC;border-radius:14px;padding:12px 16px;font-size:16px;line-height:1.6}
+.side b{color:#C85A12}
+
+/* ===== 빈칸 / 정답 ===== */
+.bl{display:inline-block;min-width:4.2em;padding:0 .35em;margin:0 .15em;border-radius:8px;text-align:center;cursor:pointer;
+    color:transparent;background:var(--sun-soft);border-bottom:3px solid #E9C43A;line-height:1.45;transition:color .25s,background .25s}
+.bl.on{color:var(--answer);font-weight:900;background:#E9F8EE;border-bottom-color:var(--answer)}
+.ans{position:relative;margin-top:10px;border-radius:12px;padding:12px 16px;cursor:pointer;min-height:54px;background:#F4F6FA;border:2px dashed #C9D3E4}
+.ans>*{visibility:hidden}
+.ans::before{content:"?";position:absolute;inset:0;display:grid;place-items:center;font-family:'Jua';font-size:26px;color:#9AA7BF}
+.ans.on{background:#EDFAF1;border:2px solid #BFE8CC;color:var(--answer);font-weight:700}
+.ans.on>*{visibility:visible}
+.ans.on::before{content:none}
+.ans p{margin:0}
+.rv-bar{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.btn{font-family:'Jua';font-size:20px;border:none;border-radius:14px;padding:10px 22px;cursor:pointer;background:var(--answer);color:#fff;box-shadow:0 3px 0 #0E7A35;transition:transform .08s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #0E7A35}
+.btn .cnt{font-family:'Noto Sans KR';font-size:15px;opacity:.85;margin-left:6px}
+.btn.ghost{background:#fff;color:var(--muted);box-shadow:0 0 0 2px var(--line) inset}
+.btn.gas{background:var(--gas);box-shadow:0 3px 0 #C85A12}
+.btn.sky{background:var(--sky);box-shadow:0 3px 0 #2E86BA}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #2563EB;outline-offset:3px}
+
+/* ===== 표 ===== */
+table.tb{width:100%;border-collapse:separate;border-spacing:0;font-size:18px;overflow:hidden;border-radius:14px;border:2px solid var(--line)}
+.tb th,.tb td{padding:10px 12px;text-align:center;border-top:1px solid var(--line)}
+.tb thead th{background:#EEF3FB;border-top:none;font-family:'Jua';font-weight:400;font-size:20px}
+.tb th.down{background:var(--sky-soft);color:#1F6FA0}
+.tb th.up{background:var(--gas-soft);color:#C85A12}
+.scroll-x{overflow-x:auto}
+
+/* ===== 시뮬레이션 ===== */
+.sim{background:#fff;border-radius:var(--r);border:2px solid #BFE0F5;padding:20px}
+.sim canvas{width:100%;height:300px;display:block;border-radius:14px;background:#FAFCFF}
+.sim-ctrl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;margin-top:14px}
+.sim-ctrl input[type=range]{width:100%;accent-color:var(--gas);height:28px}
+.meters{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.meter{border-radius:14px;padding:10px 14px;background:#F4F7FC;text-align:center}
+.meter .k{font-size:15px;color:var(--muted)}
+.meter .v{font-family:'Jua';font-size:34px;line-height:1.2}
+.meter.p .v{color:#C85A12}
+.meter.c .v{color:#1F6FA0}
+.bar{height:12px;border-radius:999px;background:#E8EDF6;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--gas);border-radius:999px;transition:width .3s}
+
+/* ===== O/X ===== */
+.ox{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px dashed var(--line)}
+.ox:first-of-type{border-top:none}
+.ox .s{flex:1}
+.ox .bl{min-width:2.4em;font-family:'Jua';font-size:26px}
+
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+footer{text-align:center;color:var(--muted);font-size:15px;padding:30px 0 calc(30px + env(safe-area-inset-bottom,0px))}
+
+@media (max-width:860px){
+  body{font-size:17px}
+  .hero .in,.grid2,.grid2.wide-left{grid-template-columns:1fr}
+  #heroBox{max-width:240px}
+  .grid3{grid-template-columns:1fr 1fr}
+  .meters{grid-template-columns:1fr}
+  .sim-ctrl{grid-template-columns:1fr}
+  .sim canvas{height:240px}
+  .sec-head h2{font-size:28px}
+  .card{padding:20px 18px}
+}
+.heroimg{width:100%;max-width:420px;justify-self:center;border-radius:28px;box-shadow:0 0 0 6px #fff,0 12px 30px rgba(200,90,18,.18)}
+.lab2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.stage{position:relative;border-radius:14px;overflow:hidden;height:280px}
+.stage.sky{background:linear-gradient(#BFE3FA,#EAF6FE)}
+.stage.sea{background:linear-gradient(#7CC4F0,#1E5F99)}
+.bag{position:absolute;left:50%;top:50%;width:70%;transform:translate(-50%,-50%);transition:transform .2s}
+.bag img{position:absolute;inset:0;width:100%;margin:auto;top:50%;transform:translateY(-50%)}
+.alt-tag{position:absolute;left:12px;top:10px;background:rgba(255,255,255,.85);border-radius:10px;padding:2px 10px;font-size:16px;font-weight:700}
+.stage.sea .alt-tag{background:rgba(255,255,255,.9)}
+.qa{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:start}
+.qa .k{font-family:'Jua';font-size:24px;line-height:1.4;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.qa .k.q{background:var(--sky)}.qa .k.a{background:var(--gas)}
+.news{border:3px double #27324A;border-radius:6px;padding:16px 20px;background:#FFFEF8}
+.news .ttl{font-family:'Jua';font-size:30px;text-align:center;border-bottom:2px solid #27324A;padding-bottom:6px;margin-bottom:10px}
+@media (max-width:860px){.lab2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav><div class="in">
+  <span class="brand">Ⅵ-1 생활 속 기체</span>
+  <a href="#intro">들어가기</a>
+  <a href="#life">생활 속 현상</a>
+  <a href="#try">해 보기</a>
+  <a href="#check">확인·정리</a>
+  <a href="#boyle">과학자 이야기</a>
+</div></nav>
+
+<header class="hero">
+  <div class="in">
+    <div>
+      <span class="unit">Ⅵ. 기체의 성질 · 1. 기체의 압력과 부피 관계</span>
+      <h1>생활 속 기체의<br>압력과 부피 관계</h1>
+      <p>뽁뽁이, 과자 봉지, 공기 침대 속에도 보일 법칙이 숨어 있다.</p>
+      <div class="pages"><span>교과서 204~206쪽</span><span>③ 생활 속 기체의 압력과 부피 관계</span><span>과학자 이야기</span></div>
+    </div>
+    <img class="heroimg" src="images/picnic_airbed.webp" alt="공기 침대에 누워 있는 가족과 과자 봉지가 있는 소풍 장면">
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 들어가기 ================= -->
+<section id="intro">
+  <div class="sec-head"><div class="num">1</div><h2>들어가기<small>교과서 204쪽</small></h2></div>
+
+  <div class="card check reveal" data-reveal>
+    <h3><span class="tag sun">이전 단원 확인하기</span>문장을 완성해 보자</h3>
+    <p style="font-size:21px">일정한 온도에서 일정량의 기체에 작용하는 압력이 커질 때 기체의 부피는 <span class="bl">줄어들고</span>, 기체 입자의 충돌 횟수는 <span class="bl">많아</span>진다.</p>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card reveal">
+    <h3><span class="tag mint">이 단원을 배우면</span></h3>
+    <div class="side" style="font-size:19px">· 생활 속에서 기체의 압력과 부피 관계를 확인할 수 있는 현상을 찾아 설명할 수 있다.</div>
+  </div>
+
+  <div class="card think reveal" data-reveal>
+    <h3><span class="tag">생각 깨우기</span>뽁뽁이로 포장한 유리컵</h3>
+    <div class="grid2">
+      <img src="images/bubblewrap.webp" alt="뽁뽁이로 포장된 유리컵을 꺼내는 학생">
+      <div>
+        <div class="bubble" style="font-size:19px;font-weight:500">다행이다. 유리컵이 깨지지 않고 잘 왔네.</div>
+        <p class="big-q" style="margin-top:16px">유리컵을 뽁뽁이로 포장하면 잘 깨지지 않는 까닭은 무엇일까?</p>
+      </div>
+    </div>
+    <div class="ans"><p>외부에서 물건에 충격이 가해지면 뽁뽁이 속 기체의 부피가 줄어들면서 기체의 압력이 커져서 충격을 줄여 주기 때문이다.</p></div>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+</section>
+
+<!-- ================= 생활 속 현상 ================= -->
+<section id="life">
+  <div class="sec-head"><div class="num">2</div><h2>생활 속 기체의 압력과 부피 관계<small>교과서 204쪽</small></h2></div>
+
+  <div class="card concept reveal" data-reveal>
+    <h3>기체의 압력과 부피 관계를 확인할 수 있는 현상</h3>
+    <div class="grid2 wide-left">
+      <p>물건을 포장할 때 사용하는 뽁뽁이는 외부에서 압력이 가해질 때 뽁뽁이 속 기체의 압력이 <span class="bl">커지고</span> 부피가 <span class="bl">줄어들면서</span> 물건이 파손되지 않게 해 준다. 이처럼 생활 속에서 기체에 작용하는 압력에 따라 기체의 압력과 부피가 달라지는 현상을 경험할 수 있다.</p>
+      <div class="side"><b>대기압</b><br>지구를 둘러싸고 있는 공기가 작용하는 압력</div>
+    </div>
+
+    <div class="grid2" style="margin-top:18px;align-items:start">
+      <div class="side" style="background:#fff;border:2px solid var(--line)">
+        <h3 style="font-size:23px">① 하늘을 나는 비행기 안 과자 봉지</h3>
+        <div style="display:flex;align-items:center;gap:8px;justify-content:center">
+          <img src="images/snack_flat.webp" alt="지상의 과자 봉지" style="width:42%">
+          <span class="jua" style="font-size:28px;color:var(--gas)">→</span>
+          <img src="images/snack_full.webp" alt="부풀어 오른 과자 봉지" style="width:42%">
+        </div>
+        <p style="font-size:18px">질소 기체가 든 과자 봉지를 높은 곳으로 가지고 가면 과자 봉지가 부풀어 오른다.</p>
+        <p style="font-size:18px">높은 곳으로 가면 <span class="bl">대기압</span>이 작아져 과자 봉지 속 기체에 작용하는 압력이 작아지므로 과자 봉지 속 기체의 부피가 <span class="bl">늘어난다</span>.</p>
+      </div>
+      <div class="side" style="background:#fff;border:2px solid var(--line)">
+        <h3 style="font-size:23px">② 공기 침대</h3>
+        <img src="images/picnic_airbed.webp" alt="공기 침대에 누운 사람" style="border-radius:12px;max-height:200px;object-fit:cover;object-position:80% 80%;width:100%">
+        <p style="font-size:18px">공기 침대에 누우면 공기 침대가 찌그러진다.</p>
+        <p style="font-size:18px">공기 침대에 가해지는 압력이 <span class="bl">커져</span> 공기 침대 속 기체의 부피가 <span class="bl">줄어든다</span>.</p>
+      </div>
+    </div>
+    <p class="note" style="margin-top:6px">그림 Ⅵ-5 기체의 압력과 부피 관계를 확인할 수 있는 현상</p>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card reveal" style="border-color:#BFE0F5">
+    <h3><span class="tag">관찰하기</span>올라가면? 내려가면?</h3>
+    <p class="note" style="margin-top:-6px">막대를 움직여 높이와 깊이에 따라 기체의 부피가 어떻게 달라지는지 확인해 보자. (온도는 일정하다고 가정)</p>
+    <div class="lab2">
+      <div>
+        <div class="stage sky" id="skyStage">
+          <span class="alt-tag" id="altTag">지표면 0 m</span>
+          <img src="images/airplane.webp" alt="" id="plane" style="position:absolute;right:8px;top:8px;width:110px;opacity:0;transition:opacity .3s">
+          <div class="bag" id="bag" style="height:60%">
+            <img src="images/snack_flat.webp" alt="과자 봉지" id="bagFlat">
+            <img src="images/snack_full.webp" alt="" id="bagFull" style="opacity:0">
+          </div>
+        </div>
+        <input type="range" id="alt" min="0" max="9000" step="50" value="0" style="width:100%;accent-color:var(--gas);margin-top:10px" aria-label="높이">
+        <div class="meters" style="grid-template-columns:repeat(3,1fr);margin-top:6px">
+          <div class="meter"><div class="k">높이</div><div class="v" id="aH" style="font-size:26px">0 m</div></div>
+          <div class="meter p"><div class="k">대기압</div><div class="v" id="aP" style="font-size:26px">1.00</div></div>
+          <div class="meter c"><div class="k">봉지 속 기체 부피(지표면 기준)</div><div class="v" id="aV" style="font-size:26px">1.0배</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="stage sea">
+          <span class="alt-tag" id="depTag">수면 0 m</span>
+          <svg viewBox="0 0 300 280" width="100%" height="100%" style="position:absolute;inset:0" aria-label="공기 방울">
+            <circle id="bub" cx="150" cy="140" r="60" fill="rgba(255,255,255,.35)" stroke="#fff" stroke-width="4"/>
+            <circle id="bubHi" cx="130" cy="120" r="12" fill="rgba(255,255,255,.8)"/>
+          </svg>
+        </div>
+        <input type="range" id="dep" min="0" max="30" step="0.5" value="0" style="width:100%;accent-color:var(--sky);margin-top:10px" aria-label="깊이">
+        <div class="meters" style="grid-template-columns:repeat(3,1fr);margin-top:6px">
+          <div class="meter"><div class="k">깊이</div><div class="v" id="dH" style="font-size:26px">0 m</div></div>
+          <div class="meter p"><div class="k">기체에 작용하는 압력</div><div class="v" id="dP" style="font-size:26px">1.0</div></div>
+          <div class="meter c"><div class="k">공기 방울 부피(수면 기준)</div><div class="v" id="dV" style="font-size:26px">1.0배</div></div>
+        </div>
+      </div>
+    </div>
+    <p class="note" style="margin:10px 0 0">압력 단위: 기압 · 물속에서는 약 10 m 내려갈 때마다 압력이 약 1기압씩 커진다.</p>
+  </div>
+
+  <div class="card think reveal" data-reveal>
+    <h3><span class="tag">더 알아보기</span>비행기가 이륙할 때 귀가 먹먹해지는 까닭</h3>
+    <p>비행기가 이륙하면 고도가 빠르게 높아지면서 대기압은 급격히 낮아지지만, 고막 안쪽 공기의 압력은 바로 변하지 않는다.</p>
+    <div class="ans"><p>고막 안쪽 공기의 부피가 늘어나 고막을 밖으로 밀어내므로 귀가 먹먹해진다. 침을 삼키거나 하품을 하면 유스타키오관이 열리면서 고막 안쪽 공기가 빠져나가 압력 차가 해소되므로 먹먹한 느낌이 없어진다.</p></div>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+</section>
+
+<!-- ================= 해 보기 ================= -->
+<section id="try">
+  <div class="sec-head"><div class="num">3</div><h2>생활 속에서 보일 법칙과 관련된 현상 찾아보기<small>교과서 205쪽 · 생활 속에서 기체의 압력과 부피 관계를 이용한 예를 더 찾아 발표해 보자.</small></h2></div>
+
+  <div class="card lab reveal">
+    <h3><span class="tag mint">해 보기</span>모둠 조사·발표</h3>
+    <p><b>준비물</b> | 스마트 기기</p>
+    <div class="grid2">
+      <ol class="steps">
+        <li>모둠별로 생활 속에서 보일 법칙과 관련된 현상을 조사해 보자.</li>
+        <li>조사한 내용을 그림이나 사진, 영상을 첨부하여 정리한 후 발표해 보자.</li>
+        <li>다른 모둠의 발표를 들으며, 궁금한 점을 추가로 질문하거나 조사한 예가 적절한지 이야기해 보자. <span class="note">(다른 모둠이 발표하는 동안 발표 내용을 경청하자.)</span></li>
+      </ol>
+      <img src="images/group_talk.webp" alt="스마트 기기로 조사하며 토의하는 학생들">
+    </div>
+    <div class="side" style="margin-top:12px"><b>주의</b> 보일 법칙은 <b>온도가 일정할 때</b> 기체의 압력과 부피 관계이므로, 온도가 변해서 부피가 달라지는 현상은 찾지 않는다.</div>
+  </div>
+
+  <div class="card lab reveal" data-reveal>
+    <h3><span class="tag mint">예시</span>공기 주머니가 들어 있는 운동화</h3>
+    <div class="grid2">
+      <img src="images/air_sneakers.webp" alt="밑창에 공기 주머니가 들어 있는 운동화" class="photo">
+      <div>
+        <div class="bubble" style="font-size:19px;font-weight:500">생활 속 예로 공기 주머니가 들어 있는 운동화가 있어. 어떤 원리일까?</div>
+        <p class="big-q" style="margin-top:14px">공기 주머니가 들어 있는 운동화를 신고 뛰어올랐다가 착지하면?</p>
+      </div>
+    </div>
+    <div class="ans"><p>착지할 때 운동화에 작용하는 압력이 커져서 공기 주머니 속 기체의 부피가 줄어든다.</p></div>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card lab reveal" data-reveal>
+    <h3><span class="tag mint">조사 예시</span>이런 현상도 있다</h3>
+    <ul class="qlist">
+      <li><span class="qn">1</span><b>하늘 높이 올라간 풍선</b>
+        <div class="ans"><p>위로 올라갈수록 대기압이 작아지므로 풍선이 하늘 높이 올라갈수록 풍선의 크기가 점점 커지다가 어느 정도 높이까지 올라가면 결국 터진다.</p></div></li>
+      <li><span class="qn">2</span><b>하임리히법</b>
+        <div class="ans"><p>음식물이 기도를 막았을 때 복부 위쪽을 강한 힘으로 압박하면 허파를 둘러싼 공간의 부피가 작아지면서 허파에 작용하는 압력이 커지므로 기도를 막은 음식물이 튀어나온다.</p></div></li>
+      <li><span class="qn">3</span><b>잠수부가 내뿜은 공기 방울</b>
+        <div class="ans"><p>공기 방울이 수면으로 올라갈수록 수압이 작아지므로 공기 방울 속 기체의 부피가 늘어나 크기가 커진다.</p></div></li>
+    </ul>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+</section>
+
+<!-- ================= 확인·정리 ================= -->
+<section id="check">
+  <div class="sec-head"><div class="num">4</div><h2>확인하고 정리하기<small>교과서 205쪽</small></h2></div>
+
+  <div class="card check reveal" data-reveal>
+    <h3><span class="tag sun">스스로 확인하기</span></h3>
+    <ul class="qlist">
+      <li><span class="qn">1</span>질소 기체가 들어 있는 과자 봉지를 높은 산 위로 가지고 가면 과자 봉지 속 기체의 부피가 ( 줄어든다, 늘어난다 ). → <span class="bl">늘어난다</span></li>
+      <li><span class="qn">2</span><b style="color:#9A7400">탐구 능력</b> | 깊은 바닷속에 사는 민어가 수면 위로 올라오면 부레가 크게 부풀어 오른다. 그 까닭을 수압에 따른 기체의 부피 변화와 관련지어 설명해 보자.
+        <div class="ans"><p>깊은 바닷속에 사는 민어가 수면 위로 올라오면 수압이 갑자기 낮아져서 부레 속 기체의 부피가 많이 늘어나기 때문이다.</p></div></li>
+    </ul>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card check reveal" data-reveal>
+    <h3><span class="tag sun">추가 확인 문제</span>보일 법칙과 관련된 현상이면 O, 아니면 X</h3>
+    <div class="ox"><span class="s">① 어항의 물이 점점 줄어든다.</span><span class="bl">X</span></div>
+    <div class="ox"><span class="s">② 향수 냄새가 방 안 전체에 퍼진다.</span><span class="bl">X</span></div>
+    <div class="ox"><span class="s">③ 높은 곳에 올라가면 과자 봉지가 부풀어 오른다.</span><span class="bl">O</span></div>
+    <div class="ox"><span class="s">④ 잠수부가 내뿜은 공기 방울이 수면에 올라올수록 커진다.</span><span class="bl">O</span></div>
+    <p class="note" style="margin:8px 0 0">①은 증발, ②는 확산과 관련된 현상이다.</p>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card concept reveal" data-reveal>
+    <h3>배운 내용 정리하기 · 보일 법칙 관련 예</h3>
+    <div class="scroll-x">
+      <table class="tb">
+        <thead><tr><th class="up">기체에 작용하는 압력이 커지면</th><th class="down">기체에 작용하는 압력이 작아지면</th></tr></thead>
+        <tbody>
+          <tr><td>기체의 부피가 <span class="bl">줄어든다</span></td><td>기체의 부피가 <span class="bl">늘어난다</span></td></tr>
+          <tr><td>공기 침대에 누울 때<br>공기 주머니가 든 운동화로 착지할 때<br>뽁뽁이에 충격이 가해질 때</td><td>질소 기체가 든 과자 봉지를 높은 곳으로 가져갈 때<br>깊은 바닷속 공기 방울이 올라올 때<br>민어가 수면 위로 올라올 때</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+</section>
+
+<!-- ================= 과학자 이야기 ================= -->
+<section id="boyle">
+  <div class="sec-head"><div class="num">5</div><h2>과학자 이야기<small>교과서 206쪽 · 기체의 성질을 밝힌 과학자</small></h2></div>
+
+  <div class="card reveal">
+    <h3><span class="tag gas">가상 인터뷰</span>보일과의 가상 인터뷰</h3>
+    <div class="grid2 wide-left" style="align-items:start">
+      <div class="qa">
+        <span class="k q">Q</span><p style="margin:4px 0;font-weight:700">기체의 성질을 알아내기 위해 어떤 실험을 했나요?</p>
+        <span class="k a">A</span><p style="margin:4px 0 14px">먼저 한쪽 끝이 막혀 있는 3 m 길이의 J 자 유리관을 직접 제작했어요. 그런 다음 이 유리관에 수은을 채우고, 유리관 속 공기가 압축되는 것을 관찰했지요. 이 과정에서 유리관이 깨져서 수은이 바닥에 흩어지는 등 여러 가지 어려움을 겪었어요.</p>
+        <span class="k q">Q</span><p style="margin:4px 0;font-weight:700">이 실험으로 어떤 원리를 발견했나요?</p>
+        <span class="k a">A</span><p style="margin:4px 0">많은 시행착오 끝에, 수은의 양이 많아져 공기에 가해지는 압력이 커지면 막힌 유리관 속 공기의 부피가 줄어드는 것을 확인할 수 있었죠. 이 실험 결과로부터 일정한 온도에서 기체의 부피가 압력에 반비례한다는 법칙을 발견했어요. 이것은 기체 입자 사이에 빈 공간이 존재하여 압력을 받으면 입자 사이의 거리가 가까워지기 때문이랍니다.</p>
+      </div>
+      <div>
+        <img src="images/boyle_jtube.webp" alt="J 자 유리관 옆에 선 보일" style="border-radius:14px">
+        <img src="images/jtube_before_after2.webp" alt="수은이 많아지면 유리관 속 공기 입자 사이 거리가 가까워지는 모습" style="margin-top:10px">
+      </div>
+    </div>
+  </div>
+
+  <div class="card reveal">
+    <h3><span class="tag gas">가치 태도 활동</span>과학자 보일에 관한 과학 신문 만들기</h3>
+    <div class="grid2 wide-left">
+      <div>
+        <p>보일의 과학적 업적을 조사하고, 조사한 내용을 바탕으로 하여 과학 신문을 만들어 보자.</p>
+        <div class="news">
+          <div class="ttl">오늘의 과학자</div>
+          <p class="jua" style="font-size:24px;text-align:center;margin:0">“보일, 기체의 압력과 부피 관계를 밝혀내다”</p>
+        </div>
+      </div>
+      <img src="images/boyle_portrait.webp" alt="보일 초상" style="max-width:220px;justify-self:center">
+    </div>
+  </div>
+
+  <div class="card reveal" style="background:var(--gas-soft);border-color:#FFC9A3">
+    <h3 style="margin:0">다음 시간에는</h3>
+    <p style="margin:6px 0 0">‘1. 기체의 압력과 부피 관계’ 중단원을 정리해 보자. (교과서 206~207쪽)</p>
+  </div>
+</section>
+
+</main>
+<footer>미래엔 중학교 과학 1 · Ⅵ. 기체의 성질 · 1. 기체의 압력과 부피 관계 · 3. 생활 속 기체의 압력과 부피 관계 (204~206쪽)</footer>
+
+<script>
+
+/* ---------- 정답 확인: 버튼 한 번에 빈칸 하나씩 ---------- */
+document.querySelectorAll('[data-reveal]').forEach(box=>{
+  const items=[...box.querySelectorAll('.bl, .ans')];
+  const btn=box.querySelector('.rv-btn');
+  if(!btn||!items.length) return;
+  const shown=()=>items.filter(x=>x.classList.contains('on')).length;
+  const upd=()=>{
+    const n=shown();
+    if(n<items.length){btn.innerHTML='정답 확인<span class="cnt">'+n+' / '+items.length+'</span>';btn.classList.remove('ghost');}
+    else{btn.textContent='다시 가리기';btn.classList.add('ghost');}
+  };
+  btn.addEventListener('click',()=>{
+    const next=items.find(x=>!x.classList.contains('on'));
+    if(next)next.classList.add('on');
+    else items.forEach(x=>x.classList.remove('on'));
+    upd();
+  });
+  items.forEach(el=>el.addEventListener('click',()=>{el.classList.add('on');upd();}));
+  upd();
+});
+
+
+/* ---------- 스크롤 페이드 & 내비 강조 ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const links=[...document.querySelectorAll('nav a')];
+const secIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));}}),{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('main section').forEach(s=>secIo.observe(s));
+
+/* ---------- 높이: 과자 봉지 ---------- */
+(function(){
+  const alt=document.getElementById('alt'),bag=document.getElementById('bag'),full=document.getElementById('bagFull'),flat=document.getElementById('bagFlat'),plane=document.getElementById('plane');
+  const tag=document.getElementById('altTag'),aH=document.getElementById('aH'),aP=document.getElementById('aP'),aV=document.getElementById('aV'),st=document.getElementById('skyStage');
+  const places=[[0,'지표면'],[1947,'한라산 높이'],[2744,'백두산 높이'],[8849,'에베레스트산 높이']];
+  function upd(){
+    const h=+alt.value,P=Math.exp(-h/8400),V=1/P;
+    const t=Math.min(1,(V-1)/0.8);
+    full.style.opacity=t;flat.style.opacity=1-t;
+    bag.style.transform='translate(-50%,-50%) scale('+(1+Math.min(V-1,1.2)*0.12)+')';
+    plane.style.opacity=h>3000?1:0;
+    const k=Math.min(1,h/9000);st.style.background='linear-gradient(rgb('+Math.round(191-120*k)+','+Math.round(227-110*k)+','+Math.round(250-60*k)+'),#EAF6FE)';
+    let name='';places.forEach(([m,n])=>{if(Math.abs(h-m)<150)name=n;});
+    tag.textContent=(name?name+' ':'')+h.toLocaleString()+' m';
+    aH.textContent=h.toLocaleString()+' m';aP.textContent=P.toFixed(2)+' 기압';aV.textContent=V.toFixed(1)+'배';
+  }
+  alt.addEventListener('input',upd);upd();
+})();
+/* ---------- 깊이: 공기 방울 ---------- */
+(function(){
+  const dep=document.getElementById('dep'),b=document.getElementById('bub'),hi=document.getElementById('bubHi');
+  const tag=document.getElementById('depTag'),dH=document.getElementById('dH'),dP=document.getElementById('dP'),dV=document.getElementById('dV');
+  function upd(){
+    const d=+dep.value,P=1+d/10,V=1/P,r=95*Math.cbrt(V);
+    b.setAttribute('r',r.toFixed(1));hi.setAttribute('r',(r*.2).toFixed(1));hi.setAttribute('cx',(150-r*.35).toFixed(1));hi.setAttribute('cy',(140-r*.35).toFixed(1));
+    tag.textContent=d===0?'수면 0 m':'수심 '+d+' m';
+    dH.textContent=d+' m';dP.textContent=P.toFixed(1)+' 기압';dV.textContent=(V/1).toFixed(2).replace(/0$/,'')+'배';
+  }
+  dep.addEventListener('input',upd);upd();
+})();
+</script>
+</body>
+</html>
